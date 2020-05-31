@@ -34,4 +34,19 @@ rmdir fromscratch
 . Tidy-up `pom.xml`
 . Build: `./mvnw clean verify`
 . Add to `.gitignore`
-. Check-in and tag: ``
+. Check-in and tag:
++
+[source,bash]
+----
+git add .; git commit -m "plain kotlin jar project"
+git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"
+git push --tags
+----
++
+. TODO
++
+[source,bash]
+----
+----
++
+. TODO
