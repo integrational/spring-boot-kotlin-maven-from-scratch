@@ -3,37 +3,49 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+    </parent>
+
     <groupId>org.integrational.spring.boot.kotlin</groupId>
     <artifactId>fromscratch</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.3.72</kotlin.version>
-        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
         <kotlin.code.style>official</kotlin.code.style>
+
+        <!-- versions -->
+        <java.version>11</java.version> <!-- override definition in Spring Boot parent POM -->
         <dokka.version>0.10.1</dokka.version>
-        <junit.version>4.12</junit.version>
+
         <!-- abbreviations -->
         <ojp>org.jetbrains.kotlin</ojp>
+        <osb>org.springframework.boot</osb>
+        <sbs>spring-boot-starter</sbs>
     </properties>
 
     <dependencies>
+        <!-- kotlin -->
         <dependency>
             <groupId>${ojp}</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
+        <!-- spring -->
+        <dependency>
+            <groupId>${osb}</groupId>
+            <artifactId>${sbs}</artifactId>
+        </dependency>
+        <!-- test -->
         <dependency>
             <groupId>${ojp}</groupId>
             <artifactId>kotlin-test-junit</artifactId>
-            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -42,26 +54,10 @@
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
+            <!-- kotlin -->
             <plugin>
-                <groupId>${ojp}</groupId>
+                <groupId>org.jetbrains.kotlin</groupId> <!-- can't use abbreviation here -->
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <args>
                         <arg>-Xjsr305=strict</arg> <!-- Enable strict mode for JSR-305 annotations -->
@@ -100,6 +96,11 @@
                 <configuration>
                     <jdkVersion>9</jdkVersion> <!-- JDK9 is the latest one for which this works -->
                 </configuration>
+            </plugin>
+            <!-- spring -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId> <!-- can't use abbreviation here -->
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

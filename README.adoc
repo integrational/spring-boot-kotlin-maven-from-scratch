@@ -45,7 +45,12 @@ git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 . Import into IDEA
 . Complete POM for Kotlin: Kotlin compiler args and compiler plugins, JVM target, stdlib for JDK8, Dokka Maven plugin
 . Build: `./mvnw clean verify dokka:dokka`
-. Tag  as *2_refined_kotlin*
+. Tag as *2_refined_kotlin*
+. Add Spring Boot parent POM
+. Removed versions managed by parent POM
+. Add import for Spring Boot core starter
+. Turned `Hello` class into Spring Boot main class `App`
+. Tag as *3_plain_spring_boot*
 . TODO
 +
 [source,bash]
