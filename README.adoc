@@ -38,9 +38,8 @@ rmdir fromscratch
 +
 [source,bash]
 ----
-git add .; git commit -m "plain kotlin jar project"
-git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"
-git push --tags
+git add .; git commit -m "plain kotlin jar project"; git push
+git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 ----
 +
 . TODO
