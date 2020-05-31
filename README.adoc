@@ -1,2 +1,37 @@
 = Spring Boot with Kotlin and Maven starting from scratch and tagging progress
 
+. Add Maven wrapper: `docker run --rm --name mvn -it -v $(pwd):/proj -w /proj maven:3-jdk-11 mvn -N io.takari:maven:0.7.7:wrapper`
+. Bootstrap Maven project: `./mvnw archetype:generate`
++
+[source,bash]
+----
+...
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: kotlin-archetype-jvm:1.3.72
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: org.integrational.spring.boot.kotlin
+[INFO] Parameter: artifactId, Value: fromscratch
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: package, Value: org.integrational.spring.boot.kotlin.fromscratch
+[INFO] Parameter: packageInPathFormat, Value: org/integrational/spring/boot/kotlin/fromscratch
+[INFO] Parameter: kotlinVersion, Value: 1.3.72
+[INFO] Parameter: package, Value: org.integrational.spring.boot.kotlin.fromscratch
+[INFO] Parameter: groupId, Value: org.integrational.spring.boot.kotlin
+[INFO] Parameter: artifactId, Value: fromscratch
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Project created from Archetype in dir: /Users/gerald/Dropbox/private/experiments/spring-boot/kotlin-maven-from-scratch/fromscratch
+...
+----
++
+. Fixing directory layout:
++
+[source,bash]
+----
+mv fromscratch/* ./
+rmdir fromscratch
+----
++
+. Tidy-up `pom.xml`
+. Build: `./mvnw clean verify`
+. Add to `.gitignore`
+. Check-in and tag: ``
