@@ -50,6 +50,7 @@ git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 . Removed versions managed by parent POM
 . Add import for Spring Boot core starter
 . Turned `Hello` class into Spring Boot main class `App`
+. Add convenience scripts: `run-dev.sh`, `build.sh`, `run.sh`, `build-docker.sh`, `run-docker.sh`
 . Tag as *3_plain_spring_boot*
 . TODO
 +
