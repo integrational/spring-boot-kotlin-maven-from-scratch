@@ -34,7 +34,7 @@ rmdir fromscratch
 . Tidy-up `pom.xml`
 . Build: `./mvnw clean verify`
 . Add to `.gitignore`
-. Check-in and tag:
+. Check-in and tag as *1_plain_kotlin*:
 +
 [source,bash]
 ----
@@ -42,6 +42,10 @@ git add .; git commit -m "plain kotlin jar project"; git push
 git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 ----
 +
+. Import into IDEA
+. Complete POM for Kotlin: Kotlin compiler args and compiler plugins, JVM target, stdlib for JDK8, Dokka Maven plugin
+. Build: `./mvnw clean verify dokka:dokka`
+. Tag  as *2_refined_kotlin*
 . TODO
 +
 [source,bash]
