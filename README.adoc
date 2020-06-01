@@ -47,12 +47,24 @@ git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 . Build: `./mvnw clean verify dokka:dokka`
 . Tag as *2_refined_kotlin*
 . Add Spring Boot parent POM
-. Removed versions managed by parent POM
+. Remove versions managed by parent POM
 . Add import for Spring Boot core starter
-. Turned `Hello` class into Spring Boot main class `App`
+. Turn `Hello` class into Spring Boot main class `App`
 . Add convenience scripts: `run-dev.sh`, `build.sh`, `run.sh`, `build-docker.sh`, `run-docker.sh`
 . Tag as *3_plain_spring_boot*
-. TODO
+. Add `application.yml` in `main` and `test` with basic `app` properties for `default` profile
+. Add properties files for integration tests (`it`) and unit tests (`ut`) profile
+. Turn-on layered jar generation in Spring Boot Maven plugin
+. Cusomize container image name
+. Add Actuator under `/management`
+. Add build-time generation of `build-info.properties` for Actuator
+. Enable desired Actuator endpoints and exposure via HTTP
+. Always expose Kubernetes-style liveness and readiness endpoints
+. Add libs for JSRs 250 and 330
+. Add JAX-RS support via Jersey starter plus Kotlin support for Jackson
+. Add ping REST resource
+. Add start/stop app before/after integration tests, using `it` profile, listening on random free server port
+
 +
 [source,bash]
 ----

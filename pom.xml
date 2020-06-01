@@ -14,11 +14,20 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
+        <skip.it>false</skip.it> <!-- skip integration tests -->
         <kotlin.code.style>official</kotlin.code.style>
+
+        <!-- container image -->
+        <container.repo>integrational</container.repo>
 
         <!-- versions -->
         <java.version>11</java.version> <!-- override definition in Spring Boot parent POM -->
         <dokka.version>0.10.1</dokka.version>
+        <javax.inject.version>1</javax.inject.version>
+        <javax.annotation.version>1.3.2</javax.annotation.version>
+        <jackson.kotlin.version>2.11.0</jackson.kotlin.version>
+        <build.helper.version>3.1.0</build.helper.version>
+        <failsafe.version>3.0.0-M4</failsafe.version>
 
         <!-- abbreviations -->
         <ojp>org.jetbrains.kotlin</ojp>
@@ -32,10 +41,37 @@
             <groupId>${ojp}</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
+        <dependency>
+            <!-- Kotlin support for Jackson JSON library -->
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson.kotlin.version}</version>
+        </dependency>
+        <!-- standards -->
+        <dependency>
+            <!-- JSR 330: @Inject, @Named, @Singleton, Provider, ... -->
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax.inject.version}</version>
+        </dependency>
+        <dependency>
+            <!-- - JSR 250: @PostConstruct, @PreDestroy, @Resource, @ManagedBean, ... -->
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax.annotation.version}</version>
+        </dependency>
         <!-- spring -->
         <dependency>
             <groupId>${osb}</groupId>
             <artifactId>${sbs}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${osb}</groupId>
+            <artifactId>${sbs}-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${osb}</groupId>
+            <artifactId>${sbs}-jersey</artifactId>
         </dependency>
         <!-- test -->
         <dependency>
@@ -97,16 +133,101 @@
                     <jdkVersion>9</jdkVersion> <!-- JDK9 is the latest one for which this works -->
                 </configuration>
             </plugin>
+            <!-- helper -->
+            <plugin>
+                <!-- acquire free port for integration tests -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build.helper.version}</version>
+                <executions>
+                    <execution>
+                        <id>reserve-network-port</id>
+                        <goals>
+                            <goal>reserve-network-port</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <portNames>
+                                <portName>test.server.port</portName>
+                            </portNames>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- set system prop to port acquired for integration tests -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe.version}</version>
+                <configuration>
+                    <skip>${skip.it}</skip>
+                    <systemPropertyVariables>
+                        <test.server.port>${test.server.port}</test.server.port>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
             <!-- spring -->
             <plugin>
                 <groupId>org.springframework.boot</groupId> <!-- can't use abbreviation here -->
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- generate build-info for Actuator -->
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <java.target>${maven.compiler.target}</java.target>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- start app before integration tests -->
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.it}</skip>
+                            <profiles>
+                                <!-- activate integration test profile -->
+                                <profile>it</profile>
+                            </profiles>
+                            <arguments>
+                                <!-- listen on port for integration tests -->
+                                <argument>--server.port=${test.server.port}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- stop app after integration tests -->
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.it}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <layers>
+                        <!-- turn-on layers for easier caching during container image creation -->
+                        <enabled>true</enabled>
+                    </layers>
+                    <image>
+                        <!-- customize container image name -->
+                        <name>${container.repo}/${project.artifactId}:${project.version}</name>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>
 
     <pluginRepositories>
         <pluginRepository>
+            <!-- needed for Dokka Maven plugin -->
             <id>jcenter</id>
             <name>JCenter</name>
             <url>https://jcenter.bintray.com/</url>

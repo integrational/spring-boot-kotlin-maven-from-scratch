@@ -1,0 +1,22 @@
+# default profile
+app:
+  name: "@project.artifactId@"
+  version: "@project.version@"
+  env: default
+
+# management and monitoring via Actuator
+management:
+  endpoints:
+    jmx:
+      exposure.exclude: "*"
+    web:
+      base-path: /management
+      exposure.include: configprops, env, health, info, metrics
+  endpoint:
+    configprops.enabled: true
+    env.enabled: true
+    health:
+      enabled: true
+      show-components: always
+    info.enabled: true
+    metrics.enabled: true
