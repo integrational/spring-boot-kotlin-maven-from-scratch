@@ -75,14 +75,22 @@
         </dependency>
         <!-- test -->
         <dependency>
+            <!-- Kotlin test API on top of JUnit 5 -->
             <groupId>${ojp}</groupId>
-            <artifactId>kotlin-test-junit</artifactId>
+            <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>${osb}</groupId>
+            <artifactId>${sbs}-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <!-- exclude JUnit 4 support -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -135,35 +143,13 @@
             </plugin>
             <!-- helper -->
             <plugin>
-                <!-- acquire free port for integration tests -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build.helper.version}</version>
-                <executions>
-                    <execution>
-                        <id>reserve-network-port</id>
-                        <goals>
-                            <goal>reserve-network-port</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <portNames>
-                                <portName>test.server.port</portName>
-                            </portNames>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <!-- set system prop to port acquired for integration tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${failsafe.version}</version>
                 <configuration>
-                    <skip>${skip.it}</skip>
-                    <systemPropertyVariables>
-                        <test.server.port>${test.server.port}</test.server.port>
-                    </systemPropertyVariables>
+                    <skipITs>${skip.it}</skipITs>
+                    <argLine>-Dspring.profiles.active=it</argLine>
                 </configuration>
             </plugin>
             <!-- spring -->
@@ -173,6 +159,7 @@
                 <executions>
                     <execution>
                         <!-- generate build-info for Actuator -->
+                        <id>build-info</id>
                         <goals>
                             <goal>build-info</goal>
                         </goals>
@@ -180,34 +167,6 @@
                             <additionalProperties>
                                 <java.target>${maven.compiler.target}</java.target>
                             </additionalProperties>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <!-- start app before integration tests -->
-                        <id>pre-integration-test</id>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.it}</skip>
-                            <profiles>
-                                <!-- activate integration test profile -->
-                                <profile>it</profile>
-                            </profiles>
-                            <arguments>
-                                <!-- listen on port for integration tests -->
-                                <argument>--server.port=${test.server.port}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <!-- stop app after integration tests -->
-                        <id>post-integration-test</id>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.it}</skip>
                         </configuration>
                     </execution>
                 </executions>
