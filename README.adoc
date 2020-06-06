@@ -63,8 +63,10 @@ git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 . Add libs for JSRs 250 and 330
 . Add JAX-RS support via Jersey starter plus Kotlin support for Jackson
 . Add ping REST resource
-. Add basic unit test, executed using `ut` profile, with mocked web stack
-. Add basic integration test, executed using `it` profile, listening on random free server port
+. Add basic app unit test, executed using `ut` profile, without web stack
+. Add basic app integration test, executed using `it` profile, listening on random free server port
+. Add integration test of ping REST resource
+. Add integration test of Actuator-exposed management endpoints
 . Tag as *4_refined_spring_boot*
 
 +
