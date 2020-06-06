@@ -1,8 +1,7 @@
-# default profile
+# profile-independent properties
 app:
   name: "@project.artifactId@"
   version: "@project.version@"
-  env: default
 
 # management and monitoring via Actuator
 management:

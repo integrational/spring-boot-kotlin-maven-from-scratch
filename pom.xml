@@ -14,6 +14,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
+        <skip.ut>false</skip.ut> <!-- skip unit tests -->
         <skip.it>false</skip.it> <!-- skip integration tests -->
         <kotlin.code.style>official</kotlin.code.style>
 
@@ -27,10 +28,9 @@
         <javax.annotation.version>1.3.2</javax.annotation.version>
         <jackson.kotlin.version>2.11.0</jackson.kotlin.version>
         <build.helper.version>3.1.0</build.helper.version>
-        <failsafe.version>3.0.0-M4</failsafe.version>
 
         <!-- abbreviations -->
-        <ojp>org.jetbrains.kotlin</ojp>
+        <ojk>org.jetbrains.kotlin</ojk>
         <osb>org.springframework.boot</osb>
         <sbs>spring-boot-starter</sbs>
     </properties>
@@ -38,7 +38,7 @@
     <dependencies>
         <!-- kotlin -->
         <dependency>
-            <groupId>${ojp}</groupId>
+            <groupId>${ojk}</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
         <dependency>
@@ -76,7 +76,7 @@
         <!-- test -->
         <dependency>
             <!-- Kotlin test API on top of JUnit 5 -->
-            <groupId>${ojp}</groupId>
+            <groupId>${ojk}</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
         </dependency>
@@ -104,8 +104,8 @@
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <configuration>
                     <args>
-                        <arg>-Xjsr305=strict</arg> <!-- Enable strict mode for JSR-305 annotations -->
-                        <arg>-Xjvm-default=enable</arg> <!-- Enable @JvmDefault -->
+                        <arg>-Xjsr305=strict</arg> <!-- enable strict mode for JSR 305 annotations -->
+                        <arg>-Xjvm-default=enable</arg> <!-- enable @JvmDefault -->
                     </args>
                     <compilerPlugins>
                         <plugin>spring</plugin>
@@ -114,12 +114,12 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>${ojp}</groupId>
+                        <groupId>${ojk}</groupId>
                         <artifactId>kotlin-maven-allopen</artifactId>
                         <version>${kotlin.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>${ojp}</groupId>
+                        <groupId>${ojk}</groupId>
                         <artifactId>kotlin-maven-noarg</artifactId>
                         <version>${kotlin.version}</version>
                     </dependency>
@@ -139,14 +139,23 @@
                 </executions>
                 <configuration>
                     <jdkVersion>9</jdkVersion> <!-- JDK9 is the latest one for which this works -->
+                    <reportUndocumented>false</reportUndocumented>
                 </configuration>
             </plugin>
             <!-- helper -->
             <plugin>
-                <!-- set system prop to port acquired for integration tests -->
+                <!-- run integration tests with dedicated profile -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skip.ut}</skipTests>
+                    <argLine>-Dspring.profiles.active=ut</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- run integration tests with dedicated profile -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${failsafe.version}</version>
                 <configuration>
                     <skipITs>${skip.it}</skipITs>
                     <argLine>-Dspring.profiles.active=it</argLine>
@@ -168,6 +177,13 @@
                                 <java.target>${maven.compiler.target}</java.target>
                             </additionalProperties>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <!-- build container image in package phase -->
+                        <id>build-image</id>
+                        <goals>
+                            <goal>build-image</goal>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>

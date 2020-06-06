@@ -1,0 +1,18 @@
+# unit test profile
+app:
+  env: ut
+
+# disable management and monitoring via Actuator
+management:
+  endpoints:
+    enabled-by-default: false
+    jmx:
+      exposure.exclude: "*"
+    web:
+      exposure.exclude: "*"
+  endpoint:
+    configprops.enabled: false
+    env.enabled: false
+    health.enabled: false
+    info.enabled: false
+    metrics.enabled: false

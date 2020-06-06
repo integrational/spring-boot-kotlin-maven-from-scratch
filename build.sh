@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./mvnw clean verify dokka:dokka
+./mvnw clean verify pre-site $*
