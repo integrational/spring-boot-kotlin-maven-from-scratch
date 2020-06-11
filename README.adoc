@@ -68,6 +68,12 @@ git tag -a "1_plain_kotlin" -m "Plain Kotlin Maven jar project"; git push --tags
 . Add integration test of ping REST resource
 . Add integration test of Actuator-exposed management endpoints
 . Tag as *4_refined_spring_boot*
+. Add config for `dev` environment
+. Add reusable Spring profile annotations for various environments
+. Add AOP support and `MethodExecutionLoggingAspect`, registered in all non-prod environments
+. Configure Spring Kotlin compiler plugin to open classes annotated with @Named
+. Set log level to `debug` in `dev`, `ut`, and `it` environments
+. Tag as *5_aop_logging*
 
 +
 [source,bash]

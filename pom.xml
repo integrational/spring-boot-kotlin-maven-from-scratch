@@ -73,6 +73,10 @@
             <groupId>${osb}</groupId>
             <artifactId>${sbs}-jersey</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${osb}</groupId>
+            <artifactId>${sbs}-aop</artifactId>
+        </dependency>
         <!-- test -->
         <dependency>
             <!-- Kotlin test API on top of JUnit 5 -->
@@ -111,6 +115,10 @@
                         <plugin>spring</plugin>
                         <plugin>jpa</plugin>
                     </compilerPlugins>
+                    <pluginOptions>
+                        <!-- annotations that identify classes to be opened -->
+                        <option>spring:annotation=javax.inject.Named</option>
+                    </pluginOptions>
                 </configuration>
                 <dependencies>
                     <dependency>

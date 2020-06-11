@@ -2,6 +2,9 @@
 app:
   env: ut
 
+logging.level:
+  org.integrational: debug
+
 # disable management and monitoring via Actuator
 management:
   endpoints:

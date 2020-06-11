@@ -1,6 +1,6 @@
-# integration test profile
+# dev profile
 app:
-  env: it
+  env: dev
 
 logging.level:
   org.integrational: debug
