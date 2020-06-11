@@ -10,6 +10,6 @@ import javax.inject.Named
 @Named
 class RestResourceRegistrator @Inject constructor(ping: PingRestResource) : ResourceConfig() {
     init {
-        register(ping)
+        registerInstances(ping)
     }
 }

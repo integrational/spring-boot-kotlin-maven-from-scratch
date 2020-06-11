@@ -3,6 +3,10 @@ app:
   name: "@project.artifactId@"
   version: "@project.version@"
 
+# tune JAX-RS infrastructure
+spring.jersey.servlet.load-on-startup: 100 # eagerly load JAX-RS servlet
+logging.level.org.glassfish.jersey.internal.inject.Providers: error # turn off misleading warning
+
 # management and monitoring via Actuator
 management:
   endpoints:
