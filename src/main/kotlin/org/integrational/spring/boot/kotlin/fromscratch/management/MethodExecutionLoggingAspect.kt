@@ -21,14 +21,14 @@ class MethodExecutionLoggingAspect {
     }
 
     @Around("anyIntegrationalMethod()")
-    fun logExecution(pjp: ProceedingJoinPoint): Any {
+    fun logExecution(pjp: ProceedingJoinPoint): Any? {
         val log = LoggerFactory.getLogger(pjp.target.javaClass)
         val met = pjp.signature.name
         logEnter(log, pjp, met)
         try {
             return pjp.proceed(pjp.args).also { logReturn(log, pjp, met, it) }
         } catch (t: Throwable) {
-            throw t.also { logThrow(log, met, it) }
+            throw t.also { logThrow(log, met, t) }
         }
     }
 
@@ -41,7 +41,7 @@ class MethodExecutionLoggingAspect {
         else l.debug("Return {}()", m)
 
     private fun logThrow(l: Logger, m: String?, t: Throwable) =
-        l.debug("Throw  {}(): {}", m, t)
+        l.debug("Throw  {}(): {}", m, t.toString())
 
     private fun isNotVoid(s: Signature?) = s is MethodSignature && s.returnType != Void.TYPE
 }
