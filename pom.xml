@@ -16,6 +16,8 @@
     <properties>
         <skip.ut>false</skip.ut> <!-- skip unit tests -->
         <skip.it>false</skip.it> <!-- skip integration tests -->
+        <skip.image>false</skip.image> <!-- skip build container image -->
+
         <kotlin.code.style>official</kotlin.code.style>
 
         <!-- container image -->
@@ -192,6 +194,9 @@
                         <goals>
                             <goal>build-image</goal>
                         </goals>
+                        <configuration>
+                            <skip>${skip.image}</skip>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
